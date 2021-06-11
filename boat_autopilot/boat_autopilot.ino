@@ -14,7 +14,6 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-#define ABS(x) (x < 0 ? -x : x)
 #define MAX(x, y) (x > y ? x : y)
 #define MIN(x, y) (x < y ? x : y)
 #define RESTRICT_RANGE(x, low, high) (MIN(MAX(x, low), high))
@@ -322,11 +321,11 @@ void loop(void) {
     over_under = drive_over_under;
   }
 
-  dutyCycle = ABS((int)angle - (int)new_angle);
+  dutyCycle = abs((int)angle - (int)new_angle);
   dutyCycle = dutyCycle * loopCount / 5;
   dutyCycle = RESTRICT_RANGE(dutyCycle, 32, 255);
 
-  if (ABS(angle - new_angle) > over_under) {
+  if (abs(angle - new_angle) > over_under) {
     digitalWrite(DIR, angle > new_angle ? HIGH : LOW);
     if (clutch) {
       ledcWrite(PWM_CLANNEL, dutyCycle);
@@ -340,13 +339,13 @@ void loop(void) {
   }
 
   /*
-  if (angle > new_angle + ABS(over_under)) {
+  if (angle > new_angle + abs(over_under)) {
     digitalWrite(DIR, HIGH);
     if (clutch)
       ledcWrite(PWM_CLANNEL, dutyCycle);
     delay(20);
     loopCount++;
-  } else if (angle < new_angle - ABS(over_under)) {
+  } else if (angle < new_angle - abs(over_under)) {
     digitalWrite(DIR, LOW);
     if (clutch)
       ledcWrite(PWM_CLANNEL, dutyCycle);
